@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NS-XAI Heart Disease Predictor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background: linear-gradient(135deg, #6b21a8, #9333ea, #a855f7);
+        background-size: 180% 180%;
+        animation: gradientFlow 10s ease infinite;
+        overflow-y: auto;
+      }
+      @keyframes gradientFlow {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(20px);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex items-start justify-center p-4 relative overflow-x-hidden">
+    <!-- Background Image -->
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Heart_anterior_exterior_view.svg/1024px-Heart_anterior_exterior_view.svg.png" alt="Heart" class="absolute w-96 opacity-20 right-10 top-10 animate-pulse pointer-events-none" />
+
+    <div class="glass rounded-3xl p-10 w-full max-w-5xl text-white shadow-2xl animate-fade-in mb-10">
+      <h1 class="text-5xl font-extrabold text-center mb-8 text-white drop-shadow-lg">
+        NS-XAI Heart Disease Predictor
+      </h1>
+      <form
+        id="heartForm"
+        class="grid grid-cols-1 md:grid-cols-2 gap-6"
+        action="{{url_for('predict')}}",
+        method="post"
+      >
+        <script>
+          const features = [
+            "age",
+            "sex",
+            "cp",
+            "trestbps",
+            "chol",
+            "fbs",
+            "restecg",
+            "thalach",
+            "exang",
+            "oldpeak",
+            "slope",
+            "ca",
+            "thal",
+          ];
+          document.write(
+            features
+              .map(
+                (feat) => `
+          <div>
+            <label class="block text-sm mb-2 capitalize font-semibold text-white/90">${feat}</label>
+            <input
+              type="text"
+              name="${feat}"
+              required
+              placeholder="Enter ${feat}"
+              class="w-full px-4 py-2 rounded-xl bg-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-4 focus:ring-purple-300 transition-all"
+            />
+          </div>`
+              )
+              .join("")
+          );
+        </script>
+
+        <div class="col-span-1 md:col-span-2 text-center mt-6">
+          <button
+            type="submit"
+            class="bg-gradient-to-br from-purple-200 via-purple-300 to-purple-400 text-purple-900 font-bold py-2 px-8 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-transform"
+          >
+            Predict
+          </button>
+        </div>
+      </form>
+
+      <div id="result" class="mt-10 {% if prediction_text %}block{% else %}hidden{% endif %}">
+        <div class="bg-white/20 p-6 rounded-2xl text-white">
+          <h2 class="text-2xl font-bold mb-3">Prediction:</h2>
+          <p id="prediction" class="text-xl mb-4">{{ prediction_text }}</p>
+          <h2 class="text-2xl font-bold mb-3">Explanation:</h2>
+          <ul id="explanation" class="list-disc pl-5 space-y-1">
+            {% for item in explanation_list %}
+              <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-fade-in {
+        animation: fade-in 1s ease-out;
+      }
+    </style>
+  </body>
+</html>
