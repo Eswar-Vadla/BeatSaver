@@ -166,7 +166,7 @@ def symbolic_explanation(features, label):
 # Symbolic Rules End
 
 flask_app = Flask(__name__)
-model = load_model("heart_disease_rebuilt.keras")
+model = load_model("heart_disease_fixed.keras")
 
 @flask_app.route("/")
 def Home():
