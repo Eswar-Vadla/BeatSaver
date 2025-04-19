@@ -3,6 +3,10 @@ import numpy as np
 from flask import Flask, request, jsonify, render_template
 from tensorflow.keras.models import load_model
 
+import os
+
+port = int(os.environ.get("PORT", 5000))
+app.run(host="0.0.0.0", port=port)
 
 # Symbolic Rules
 
