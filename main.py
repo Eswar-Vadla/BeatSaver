@@ -3,10 +3,6 @@ import numpy as np
 from flask import Flask, request, jsonify, render_template
 from tensorflow.keras.models import load_model
 
-import os
-
-port = int(os.environ.get("PORT", 5000))
-app.run(host="0.0.0.0", port=port)
 
 # Symbolic Rules
 
@@ -170,7 +166,7 @@ def symbolic_explanation(features, label):
 # Symbolic Rules End
 
 flask_app = Flask(__name__)
-model = load_model("heart_disease.h5")
+model = load_model("heart_disease_rebuilt.keras")
 
 @flask_app.route("/")
 def Home():
